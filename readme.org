@@ -88,7 +88,7 @@ Fixing Emacs's defaults is a nontrivial problem. We'll start with UI concerns.
    ;; the documentation can get bent imo
    use-short-answers t
    ;; my source directory
-   default-directory "~/src/"
+   default-directory "~/Projects/"
    ;; eke out a little more scrolling performance
    fast-but-imprecise-scrolling t
    ;; prefer newer elisp files
@@ -304,13 +304,13 @@ Most major modes pollute the modeline, so we pull in diminish.el to quiesce them
     (diminish 'visual-line-mode))
 #+end_src
 
-The default modeline is pretty uninspiring, and nano-modeline is very minimal and pleasing.
+# The default modeline is pretty uninspiring, and nano-modeline is very minimal and pleasing.
 
-#+begin_src emacs-lisp
-  (use-package nano-modeline
-    :config (nano-modeline-mode)
-    :custom (nano-modeline-position 'bottom))
-#+end_src
+# #+begin_src emacs-lisp
+#   (use-package nano-modeline
+#     :config (nano-modeline-mode)
+#     :custom (nano-modeline-position 'bottom))
+# #+end_src
 
 I find it useful to have a slightly more apparent indicator of which buffer is active at the moment.
 
@@ -695,57 +695,57 @@ One of the main problems with Emacs is how many ephemeral buffers it creates. I'
     (popper-echo-mode +1))
 #+end_src
 
-** Org-mode
+# ** Org-mode
 
-Even though my whole-ass blogging workflow is built around org-mode, I still can't say that I know it very well. I don't take advantage of ~org-agenda~, ~org-timer~, ~org-calendar~, ~org-capture~, anything interesting to do with tags, et cetera. Someday I will learn these things, but not yet.
+# Even though my whole-ass blogging workflow is built around org-mode, I still can't say that I know it very well. I don't take advantage of ~org-agenda~, ~org-timer~, ~org-calendar~, ~org-capture~, anything interesting to do with tags, et cetera. Someday I will learn these things, but not yet.
 
-#+begin_src emacs-lisp
-  (use-package org
-    :pin org
-    :hook ((org-mode . visual-line-mode))
-    :bind (("C-c o c" . counsel-org-capture)
-           ("C-c o a" . org-agenda)
-           :map org-mode-map
-           ("C-c c" . #'org-mode-insert-code)
-           ("C-c a f" . #'org-shifttab)
-           ("C-c a S" . #'zero-width))
-    :custom
-    (org-adapt-indentation nil)
-    (org-directory "~/txt")
-    (org-default-notes-file (concat org-directory "/notes.org"))
-    (org-return-follows-link t)
-    (org-src-ask-before-returning-to-edit-buffer nil "org-src is kinda needy out of the box")
-    (org-src-window-setup 'split-window-below)
-    (org-agenda-files (list (concat org-directory "/agenda.org")))
+# #+begin_src emacs-lisp
+#   (use-package org
+#     :pin org
+#     :hook ((org-mode . visual-line-mode))
+#     :bind (("C-c o c" . counsel-org-capture)
+#            ("C-c o a" . org-agenda)
+#            :map org-mode-map
+#            ("C-c c" . #'org-mode-insert-code)
+#            ("C-c a f" . #'org-shifttab)
+#            ("C-c a S" . #'zero-width))
+#     :custom
+#     (org-adapt-indentation nil)
+#     (org-directory "~/txt")
+#     (org-default-notes-file (concat org-directory "/notes.org"))
+#     (org-return-follows-link t)
+#     (org-src-ask-before-returning-to-edit-buffer nil "org-src is kinda needy out of the box")
+#     (org-src-window-setup 'split-window-below)
+#     (org-agenda-files (list (concat org-directory "/agenda.org")))
 
-    :config
-    (unbind-key "M-<left>" org-mode-map)
-    (unbind-key "M-<right>" org-mode-map)
+#     :config
+#     (unbind-key "M-<left>" org-mode-map)
+#     (unbind-key "M-<right>" org-mode-map)
 
-    (defun make-inserter (c) '(lambda () (interactive) (insert-char c)))
-    (defun zero-width () (interactive) (insert "​"))
+#     (defun make-inserter (c) '(lambda () (interactive) (insert-char c)))
+#     (defun zero-width () (interactive) (insert "​"))
 
-    (defun org-mode-insert-code ()
-      "Like markdown-insert-code, but for org instead."
-      (interactive)
-      (org-emphasize ?~)))
+#     (defun org-mode-insert-code ()
+#       "Like markdown-insert-code, but for org instead."
+#       (interactive)
+#       (org-emphasize ?~)))
 
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode))
+#   (use-package org-bullets
+#     :hook (org-mode . org-bullets-mode))
 
-  (use-package org-ref
-    :config (defalias 'dnd-unescape-uri 'dnd--unescape-uri))
+#   (use-package org-ref
+#     :config (defalias 'dnd-unescape-uri 'dnd--unescape-uri))
 
-  (use-package org-roam
-    :bind
-    (("C-c o r" . org-roam-capture)
-     ("C-c o f" . org-roam-node-find))
-    :custom
-    (org-roam-directory (expand-file-name "~/Dropbox/txt/roam"))
-    (org-roam-v2-ack t)
-    :config
-    (org-roam-db-autosync-mode))
-#+end_src
+#   (use-package org-roam
+#     :bind
+#     (("C-c o r" . org-roam-capture)
+#      ("C-c o f" . org-roam-node-find))
+#     :custom
+#     (org-roam-directory (expand-file-name "~/Dropbox/txt/roam"))
+#     (org-roam-v2-ack t)
+#     :config
+#     (org-roam-db-autosync-mode))
+# #+end_src
 
 * Keymacs support
 
@@ -766,7 +766,7 @@ Magit is one of the top three reasons anyone should use Emacs. What a brilliant 
     :diminish auto-revert-mode
     :bind (("C-c g" . #'magit-status))
     :custom
-    (magit-repository-directories '(("~/src" . 1)))
+    (magit-repository-directories '(("~/Projects" . 1)))
     :config
     (add-to-list 'magit-no-confirm 'stage-all-changes))
 
@@ -1347,4 +1347,45 @@ Au revoir.
 
 #+begin_src emacs-lisp
   (provide 'init)
+#+end_src
+
+* Postscript
+Having made it this far, standing on the s-expressions of giants, the immediate items to add are:
+
+* Neotree
+#+begin_src emacs-lisp
+  (use-package neotree)
+
+  ;;; Config for Neotree file browser
+  ;;; most taken from <https://www.emacswiki.org/emacs/NeoTree>
+
+  ;; Projectile integration with Neotree
+  (defun neotree-project-dir ()
+    "Open NeoTree using the git root."
+    (interactive)
+    (let ((project-dir (projectile-project-root))
+          (file-name (buffer-file-name)))
+      (neotree-toggle)
+      (if project-dir
+          (if (neo-global--window-exists-p)
+              (progn
+                (neotree-dir project-dir)
+                (neotree-find file-name)))
+        (message "Could not find git project root."))))
+
+  ;; bind ⌘-b to toggle neotree
+  (global-set-key (kbd "s-b") 'neotree-toggle)
+  ;; bind [F8] to open project dir in Neotree
+  (global-set-key (kbg "M-s-b") 'neotree-project-dir)
+
+  ;;; Open Neotree tree at current file
+  (setq neo-smart-open t)
+  (setq neo-autorefresh t)
+
+  ;; Allow resize of Neotree window/gutter & make a little larger
+  (setq neo-window-fixed-size nil)
+  (setq neo-window-width 50)
+  ;; Use nerd-font arrows
+  (setq neo-theme 'nerd)
+
 #+end_src
